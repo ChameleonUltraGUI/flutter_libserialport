@@ -311,9 +311,10 @@ static void get_usb_details(struct sp_port *port, DEVINST dev_inst_match)
 		HANDLE host_controller_device;
 
 		device_interface_data.cbSize = sizeof(device_interface_data);
-		if (!SetupDiEnumDeviceInterfaces(device_info, 0,
+		/* Device nodes and interfaces can have different enumeration orders. */
+		if (!SetupDiEnumDeviceInterfaces(device_info, &device_info_data,
 		                                 &GUID_CLASS_USB_HOST_CONTROLLER,
-		                                 i, &device_interface_data))
+		                                 0, &device_interface_data))
 			continue;
 
 		if (!SetupDiGetDeviceInterfaceDetail(device_info,&device_interface_data,
@@ -366,9 +367,9 @@ static void get_usb_details(struct sp_port *port, DEVINST dev_inst_match)
 			HANDLE host_controller_device;
 
 			device_interface_data.cbSize = sizeof(device_interface_data);
-			if (!SetupDiEnumDeviceInterfaces(device_info, 0,
+			if (!SetupDiEnumDeviceInterfaces(device_info, &device_info_data,
 			                                 &GUID_CLASS_USB_HOST_CONTROLLER,
-			                                 i, &device_interface_data))
+			                                 0, &device_interface_data))
 				continue;
 
 			if (!SetupDiGetDeviceInterfaceDetail(device_info,&device_interface_data,
